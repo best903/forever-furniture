@@ -13,6 +13,11 @@ body {
   min-height: 100vh;
 }
 
+/* ===== Hidden ===== */
+[hidden] {
+  display: none !important;
+}
+
 /* ===== Screen ===== */
 .screen {
   max-width: 640px;
