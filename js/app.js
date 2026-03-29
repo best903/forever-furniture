@@ -60,27 +60,33 @@
     const count = imgs.length;
     if (count <= 1) return;
 
+    // Touch target is the overflow-hidden wrapper
+    const touchTarget = container.parentElement;
+
     function goTo(idx) {
       currentIndex = Math.max(0, Math.min(idx, count - 1));
       container.style.transform = `translateX(-${currentIndex * 100}%)`;
       container.style.transition = 'transform 0.3s ease';
       container.dataset.index = currentIndex;
 
-      // Update dots
-      const dotsContainer = container.parentElement.querySelector('.gallery-dots, .lightbox-dots');
-      if (dotsContainer) {
-        dotsContainer.querySelectorAll('.dot').forEach((dot, i) => {
-          dot.classList.toggle('active', i === currentIndex);
-        });
+      // Update dots — look in parent or grandparent for dots
+      const wrapper = container.closest('.gallery-wrapper, .lightbox');
+      if (wrapper) {
+        const dotsContainer = wrapper.querySelector('.gallery-dots, .lightbox-dots');
+        if (dotsContainer) {
+          dotsContainer.querySelectorAll('.dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+          });
+        }
       }
     }
 
-    container.addEventListener('touchstart', (e) => {
+    touchTarget.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
       container.style.transition = 'none';
     }, { passive: true });
 
-    container.addEventListener('touchend', (e) => {
+    touchTarget.addEventListener('touchend', (e) => {
       const diff = startX - e.changedTouches[0].clientX;
       if (Math.abs(diff) > SWIPE_THRESHOLD) {
         goTo(currentIndex + (diff > 0 ? 1 : -1));
@@ -123,7 +129,7 @@
     lightboxEl.setAttribute('aria-modal', 'true');
     lightboxEl.innerHTML = `
       <button class="lightbox-close">&times;</button>
-      <div class="lightbox-gallery">${imagesHtml}</div>
+      <div class="lightbox-gallery-wrapper"><div class="lightbox-gallery">${imagesHtml}</div></div>
       ${dotsHtml}`;
 
     document.body.appendChild(lightboxEl);
@@ -148,7 +154,8 @@
       e.stopPropagation();
       closeLightbox();
     });
-    lbGallery.addEventListener('click', (e) => e.stopPropagation());
+    const lbWrapper = lightboxEl.querySelector('.lightbox-gallery-wrapper');
+    lbWrapper.addEventListener('click', (e) => e.stopPropagation());
     const lbDots = lightboxEl.querySelector('.lightbox-dots');
     if (lbDots) lbDots.addEventListener('click', (e) => e.stopPropagation());
 

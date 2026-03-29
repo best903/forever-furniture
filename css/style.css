@@ -94,17 +94,13 @@ a {
 /* ===== Image Gallery (scroll-snap) ===== */
 .gallery-wrapper {
   position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
 }
 
 .gallery {
   display: flex;
-  overflow: hidden;
-  touch-action: pan-y;
-  scrollbar-width: none;
-}
-
-.gallery::-webkit-scrollbar {
-  display: none;
+  will-change: transform;
 }
 
 .gallery img {
@@ -255,17 +251,18 @@ a {
   line-height: 1;
 }
 
-.lightbox-gallery {
-  display: flex;
+.lightbox-gallery-wrapper {
   overflow: hidden;
   touch-action: pan-y;
-  scrollbar-width: none;
   width: 100%;
   height: 80vh;
 }
 
-.lightbox-gallery::-webkit-scrollbar {
-  display: none;
+.lightbox-gallery {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
 }
 
 .lightbox-gallery img {
