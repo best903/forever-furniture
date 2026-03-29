@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin - 가구 관리</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- 토큰 입력 화면 -->
+  <div id="auth-screen" class="screen">
+    <div class="auth-card">
+      <h1>가구 관리 Admin</h1>
+      <p class="auth-desc">GitHub Personal Access Token을 입력해주세요.</p>
+      <p class="auth-hint">Settings → Developer settings → Fine-grained tokens에서<br>이 저장소의 Contents 읽기/쓰기 권한만 부여하세요.</p>
+      <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+      <button id="token-submit" class="btn btn-primary">연결</button>
+      <p id="auth-error" class="error-msg" hidden></p>
+    </div>
+  </div>
+
+  <!-- 메인 Admin 화면 -->
+  <div id="admin-screen" class="screen" hidden>
+    <header class="admin-header">
+      <h1>가구 관리</h1>
+      <div class="header-actions">
+        <button id="btn-add" class="btn btn-primary">+ 새 가구</button>
+        <button id="btn-logout" class="btn btn-ghost">토큰 초기화</button>
+      </div>
+    </header>
+
+    <main id="furniture-list" class="admin-list">
+      <p class="loading-msg">불러오는 중...</p>
+    </main>
+  </div>
+
+  <!-- 편집 모달 -->
+  <div id="edit-modal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h2 id="modal-title">가구 편집</h2>
+      <form id="edit-form">
+        <input type="hidden" id="edit-id">
+
+        <label for="edit-name">제품명</label>
+        <input type="text" id="edit-name" required placeholder="예: 3인용 패브릭 소파">
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="edit-original-price">정가 (원)</label>
+            <input type="number" id="edit-original-price" required placeholder="890000">
+          </div>
+          <div class="form-field">
+            <label for="edit-selling-price">판매가 (원)</label>
+            <input type="number" id="edit-selling-price" required placeholder="350000">
+          </div>
+        </div>
+
+        <label for="edit-description">설명</label>
+        <textarea id="edit-description" rows="3" placeholder="상태, 사용기간, 메모 등"></textarea>
+
+        <label for="edit-detail-url">상품 링크 (선택)</label>
+        <input type="url" id="edit-detail-url" placeholder="https://...">
+
+        <label class="checkbox-label">
+          <input type="checkbox" id="edit-sold">
+          <span>판매완료</span>
+        </label>
+
+        <!-- 사진 관리 -->
+        <div class="photo-section">
+          <label>사진</label>
+          <div id="photo-list" class="photo-grid"></div>
+          <label class="file-upload-label">
+            <span>+ 사진 추가</span>
+            <input type="file" id="photo-upload" accept="image/*" multiple hidden>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" id="btn-save">저장</button>
+          <button type="button" class="btn btn-ghost" id="btn-cancel">취소</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 토스트 -->
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
