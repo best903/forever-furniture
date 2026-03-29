@@ -81,10 +81,24 @@
       }
     }
 
+    let startY = 0;
+    let swiping = false;
+
     touchTarget.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      swiping = false;
       container.style.transition = 'none';
     }, { passive: true });
+
+    touchTarget.addEventListener('touchmove', (e) => {
+      const dx = Math.abs(e.touches[0].clientX - startX);
+      const dy = Math.abs(e.touches[0].clientY - startY);
+      if (dx > dy && dx > 10) {
+        swiping = true;
+        e.preventDefault(); // prevent vertical scroll during horizontal swipe
+      }
+    }, { passive: false });
 
     touchTarget.addEventListener('touchend', (e) => {
       const diff = startX - e.changedTouches[0].clientX;
