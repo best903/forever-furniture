@@ -163,8 +163,12 @@
       dots.forEach((dot, i) => dot.classList.toggle('active', i === startIndex));
     }
 
+    // History: push state so back button closes lightbox
+    history.pushState({ lightbox: true }, '');
+    window.addEventListener('popstate', onPopStateLightbox);
+
     // Events
-    lightboxEl.addEventListener('click', closeLightbox);
+    lightboxEl.addEventListener('click', () => closeLightbox());
     lightboxEl.querySelector('.lightbox-close').addEventListener('click', (e) => {
       e.stopPropagation();
       closeLightbox();
@@ -177,8 +181,17 @@
     document.addEventListener('keydown', handleLightboxKey);
   }
 
-  function closeLightbox() {
+  function closeLightbox(fromPopState) {
     if (!lightboxEl) return;
+
+    if (fromPopState !== true) {
+      // X, background click, ESC: let history.back() trigger popstate → actual cleanup
+      history.back();
+      return;
+    }
+
+    // Called from popstate: history already popped, do DOM cleanup
+    window.removeEventListener('popstate', onPopStateLightbox);
 
     // Sync source gallery to current index
     const lbGallery = lightboxEl.querySelector('.lightbox-gallery');
@@ -203,6 +216,10 @@
     lightboxEl = null;
     lightboxSourceGallery = null;
     document.body.classList.remove('lightbox-open');
+  }
+
+  function onPopStateLightbox() {
+    closeLightbox(true);
   }
 
   function handleLightboxKey(e) {
