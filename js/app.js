@@ -17,8 +17,7 @@
     const soldClass = item.sold ? ' sold' : '';
     const images = item.images
       .map((file, i) => {
-        const lazy = i > 0 ? ' loading="lazy"' : '';
-        return `<img src="images/${item.id}/${file}?t=${cacheBust}" alt="${item.name} 사진 ${i + 1}"${lazy}>`;
+        return `<img src="images/${item.id}/${file}?t=${cacheBust}" alt="${item.name} 사진 ${i + 1}">`;
       })
       .join('');
 
