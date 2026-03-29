@@ -98,9 +98,8 @@ a {
 
 .gallery {
   display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  touch-action: pan-y;
   scrollbar-width: none;
 }
 
@@ -109,13 +108,14 @@ a {
 }
 
 .gallery img {
-  scroll-snap-align: center;
   flex: 0 0 100%;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .gallery-dots {
@@ -169,6 +169,15 @@ a {
   color: #e74c3c;
   font-size: 1.2rem;
   font-weight: 700;
+}
+
+.price-discount {
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 /* ===== Description ===== */
@@ -229,23 +238,27 @@ a {
 
 .lightbox-close {
   position: absolute;
-  top: 12px;
+  top: 16px;
   right: 16px;
   z-index: 101;
-  background: none;
-  border: none;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.8);
   color: #fff;
-  font-size: 2rem;
+  font-size: 1.5rem;
   cursor: pointer;
-  padding: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   line-height: 1;
 }
 
 .lightbox-gallery {
   display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  touch-action: pan-y;
   scrollbar-width: none;
   width: 100%;
   height: 80vh;
@@ -256,12 +269,13 @@ a {
 }
 
 .lightbox-gallery img {
-  scroll-snap-align: center;
   flex: 0 0 100%;
   width: 100%;
   height: 100%;
   object-fit: contain;
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .lightbox-dots {

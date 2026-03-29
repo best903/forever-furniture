@@ -1,11 +1,17 @@
 (() => {
   'use strict';
 
+  const cacheBust = Date.now();
+  const SWIPE_THRESHOLD = 40;
+
   function formatPrice(num) {
     return num.toLocaleString('ko-KR') + '원';
   }
 
-  const cacheBust = Date.now();
+  function calcDiscount(original, selling) {
+    if (!original || original <= selling) return 0;
+    return Math.round((1 - selling / original) * 100);
+  }
 
   function renderCard(item) {
     const soldClass = item.sold ? ' sold' : '';
@@ -24,15 +30,19 @@
       ? `<a href="${item.detailUrl}" class="detail-link" target="_blank" rel="noopener">상품 정보 보기</a>`
       : '';
 
+    const discount = calcDiscount(item.originalPrice, item.sellingPrice);
+    const discountBadge = discount > 0 ? `<span class="price-discount">${discount}%</span>` : '';
+
     return `
       <article id="${item.id}" class="furniture-card${soldClass}">
         <div class="gallery-wrapper">
-          <div class="gallery">${images}</div>
+          <div class="gallery" data-index="0">${images}</div>
           ${item.images.length > 1 ? `<div class="gallery-dots">${dots}</div>` : ''}
         </div>
         <div class="card-body">
           <h2 class="card-title">${item.name}</h2>
           <div class="card-price">
+            ${discountBadge}
             <span class="price-original">${formatPrice(item.originalPrice)}</span>
             <span class="price-selling">${formatPrice(item.sellingPrice)}</span>
           </div>
@@ -42,45 +52,63 @@
       </article>`;
   }
 
-  function initGalleryIndicators() {
-    document.querySelectorAll('.gallery').forEach((gallery) => {
-      const imgs = gallery.querySelectorAll('img');
-      const dotsContainer = gallery.parentElement.querySelector('.gallery-dots');
-      if (!dotsContainer || imgs.length <= 1) return;
+  // ===== Swipe Controller =====
+  function initSwipe(container) {
+    let startX = 0;
+    let currentIndex = 0;
+    const imgs = container.querySelectorAll('img');
+    const count = imgs.length;
+    if (count <= 1) return;
 
-      const dots = dotsContainer.querySelectorAll('.dot');
+    function goTo(idx) {
+      currentIndex = Math.max(0, Math.min(idx, count - 1));
+      container.style.transform = `translateX(-${currentIndex * 100}%)`;
+      container.style.transition = 'transform 0.3s ease';
+      container.dataset.index = currentIndex;
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const idx = Array.from(imgs).indexOf(entry.target);
-              dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-            }
-          });
-        },
-        { root: gallery, threshold: 0.5 }
-      );
+      // Update dots
+      const dotsContainer = container.parentElement.querySelector('.gallery-dots, .lightbox-dots');
+      if (dotsContainer) {
+        dotsContainer.querySelectorAll('.dot').forEach((dot, i) => {
+          dot.classList.toggle('active', i === currentIndex);
+        });
+      }
+    }
 
-      imgs.forEach((img) => observer.observe(img));
+    container.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      container.style.transition = 'none';
+    }, { passive: true });
+
+    container.addEventListener('touchend', (e) => {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > SWIPE_THRESHOLD) {
+        goTo(currentIndex + (diff > 0 ? 1 : -1));
+      } else {
+        goTo(currentIndex); // snap back
+      }
     });
+
+    // Store goTo for external use
+    container._goTo = goTo;
+    container._getIndex = () => currentIndex;
+    container._setIndex = (idx) => { currentIndex = idx; };
+  }
+
+  function initAllSwipes() {
+    document.querySelectorAll('.gallery').forEach(initSwipe);
   }
 
   // ===== Lightbox =====
   let lightboxEl = null;
-  let lightboxGallery = null;
-  let lightboxObserver = null;
   let lightboxSourceGallery = null;
-  let lightboxCurrentIndex = 0;
 
   function openLightbox(gallery, startIndex) {
     const imgs = gallery.querySelectorAll('img');
     if (!imgs.length) return;
 
     lightboxSourceGallery = gallery;
-    lightboxCurrentIndex = startIndex;
 
-    // Build lightbox HTML
     const imagesHtml = Array.from(imgs)
       .map((img) => `<img src="${img.src}" alt="${img.alt}">`)
       .join('');
@@ -101,35 +129,26 @@
     document.body.appendChild(lightboxEl);
     document.body.classList.add('lightbox-open');
 
-    lightboxGallery = lightboxEl.querySelector('.lightbox-gallery');
+    const lbGallery = lightboxEl.querySelector('.lightbox-gallery');
 
-    // Scroll to start image
-    const lbImgs = lightboxGallery.querySelectorAll('img');
-    if (lbImgs[startIndex]) {
-      lightboxGallery.scrollLeft = lbImgs[startIndex].offsetLeft;
-    }
-
-    // Dot indicators
-    if (imgs.length > 1) {
+    // Init swipe for lightbox
+    initSwipe(lbGallery);
+    if (lbGallery._goTo) {
+      lbGallery._setIndex(startIndex);
+      lbGallery.style.transform = `translateX(-${startIndex * 100}%)`;
+      lbGallery.style.transition = 'none';
+      // Update dots
       const dots = lightboxEl.querySelectorAll('.dot');
-      lightboxObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              lightboxCurrentIndex = Array.from(lbImgs).indexOf(entry.target);
-              dots.forEach((dot, i) => dot.classList.toggle('active', i === lightboxCurrentIndex));
-            }
-          });
-        },
-        { root: lightboxGallery, threshold: 0.5 }
-      );
-      lbImgs.forEach((img) => lightboxObserver.observe(img));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === startIndex));
     }
 
     // Events
     lightboxEl.addEventListener('click', closeLightbox);
-    lightboxEl.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
-    lightboxGallery.addEventListener('click', (e) => e.stopPropagation());
+    lightboxEl.querySelector('.lightbox-close').addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeLightbox();
+    });
+    lbGallery.addEventListener('click', (e) => e.stopPropagation());
     const lbDots = lightboxEl.querySelector('.lightbox-dots');
     if (lbDots) lbDots.addEventListener('click', (e) => e.stopPropagation());
 
@@ -140,21 +159,26 @@
     if (!lightboxEl) return;
 
     // Sync source gallery to current index
-    if (lightboxSourceGallery) {
-      const sourceImgs = lightboxSourceGallery.querySelectorAll('img');
-      if (sourceImgs[lightboxCurrentIndex]) {
-        lightboxSourceGallery.scrollLeft = sourceImgs[lightboxCurrentIndex].offsetLeft;
+    const lbGallery = lightboxEl.querySelector('.lightbox-gallery');
+    if (lightboxSourceGallery && lbGallery._getIndex) {
+      const idx = lbGallery._getIndex();
+      if (lightboxSourceGallery._goTo) {
+        lightboxSourceGallery._setIndex(idx);
+        lightboxSourceGallery.style.transform = `translateX(-${idx * 100}%)`;
+        lightboxSourceGallery.style.transition = 'none';
+        // Update card dots
+        const dotsContainer = lightboxSourceGallery.parentElement.querySelector('.gallery-dots');
+        if (dotsContainer) {
+          dotsContainer.querySelectorAll('.dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === idx);
+          });
+        }
       }
     }
 
-    if (lightboxObserver) {
-      lightboxObserver.disconnect();
-      lightboxObserver = null;
-    }
     document.removeEventListener('keydown', handleLightboxKey);
     lightboxEl.remove();
     lightboxEl = null;
-    lightboxGallery = null;
     lightboxSourceGallery = null;
     document.body.classList.remove('lightbox-open');
   }
@@ -167,8 +191,7 @@
     document.querySelectorAll('.gallery img').forEach((img) => {
       img.addEventListener('click', () => {
         const gallery = img.closest('.gallery');
-        const imgs = gallery.querySelectorAll('img');
-        const index = Array.from(imgs).indexOf(img);
+        const index = gallery._getIndex ? gallery._getIndex() : 0;
         openLightbox(gallery, index);
       });
     });
@@ -203,7 +226,7 @@
       const html = data.furniture.map(renderCard).join('');
       list.innerHTML = html;
 
-      initGalleryIndicators();
+      initAllSwipes();
       initLightboxTriggers();
       scrollToHash();
     } catch (err) {
