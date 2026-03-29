@@ -284,6 +284,69 @@ a {
   height: 8px;
 }
 
+/* Lightbox arrows */
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 101;
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.lightbox-arrow:hover {
+  opacity: 1;
+}
+
+.lightbox-arrow-left { left: 16px; }
+.lightbox-arrow-right { right: 16px; }
+
+/* Card gallery arrows (PC hover) */
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.3);
+  border: none;
+  color: #fff;
+  font-size: 1.8rem;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.gallery-wrapper:hover .gallery-arrow {
+  display: flex;
+  opacity: 0.7;
+}
+
+.gallery-wrapper:hover .gallery-arrow:hover {
+  opacity: 1;
+}
+
+.gallery-arrow-left { left: 8px; }
+.gallery-arrow-right { right: 8px; }
+
 body.lightbox-open {
   overflow: hidden;
 }

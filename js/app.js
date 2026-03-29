@@ -38,7 +38,7 @@
       <article id="${item.id}" class="furniture-card${soldClass}">
         <div class="gallery-wrapper">
           <div class="gallery" data-index="0">${images}</div>
-          ${item.images.length > 1 ? `<div class="gallery-dots">${dots}</div>` : ''}
+          ${item.images.length > 1 ? `<button class="gallery-arrow gallery-arrow-left">&#8249;</button><button class="gallery-arrow gallery-arrow-right">&#8250;</button><div class="gallery-dots">${dots}</div>` : ''}
         </div>
         <div class="card-body">
           <h2 class="card-title">${item.name}</h2>
@@ -110,6 +110,15 @@
       }
     });
 
+    // Card gallery arrow buttons
+    const wrapper = container.closest('.gallery-wrapper');
+    if (wrapper) {
+      const leftBtn = wrapper.querySelector('.gallery-arrow-left');
+      const rightBtn = wrapper.querySelector('.gallery-arrow-right');
+      if (leftBtn) leftBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(currentIndex - 1); });
+      if (rightBtn) rightBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(currentIndex + 1); });
+    }
+
     // Store goTo for external use
     container._goTo = goTo;
     container._getIndex = () => currentIndex;
@@ -151,6 +160,7 @@
     document.body.classList.add('lightbox-open');
 
     const lbGallery = lightboxEl.querySelector('.lightbox-gallery');
+    const imgCount = imgs.length;
 
     // Init swipe for lightbox
     initSwipe(lbGallery);
@@ -161,6 +171,22 @@
       // Update dots
       const dots = lightboxEl.querySelectorAll('.dot');
       dots.forEach((dot, i) => dot.classList.toggle('active', i === startIndex));
+    }
+
+    // Nav arrows (PC)
+    if (imgCount > 1) {
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'lightbox-arrow lightbox-arrow-left';
+      prevBtn.innerHTML = '&#8249;';
+      prevBtn.addEventListener('click', (e) => { e.stopPropagation(); lbGallery._goTo(lbGallery._getIndex() - 1); });
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'lightbox-arrow lightbox-arrow-right';
+      nextBtn.innerHTML = '&#8250;';
+      nextBtn.addEventListener('click', (e) => { e.stopPropagation(); lbGallery._goTo(lbGallery._getIndex() + 1); });
+
+      lightboxEl.appendChild(prevBtn);
+      lightboxEl.appendChild(nextBtn);
     }
 
     // History: push state so back button closes lightbox
@@ -224,6 +250,10 @@
 
   function handleLightboxKey(e) {
     if (e.key === 'Escape') closeLightbox();
+    const lbGallery = lightboxEl && lightboxEl.querySelector('.lightbox-gallery');
+    if (!lbGallery || !lbGallery._goTo) return;
+    if (e.key === 'ArrowLeft') lbGallery._goTo(lbGallery._getIndex() - 1);
+    if (e.key === 'ArrowRight') lbGallery._goTo(lbGallery._getIndex() + 1);
   }
 
   function initLightboxTriggers() {
