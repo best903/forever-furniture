@@ -23,9 +23,9 @@
     const toast = $('#toast');
     toast.textContent = msg;
     toast.className = `toast ${type}`;
-    toast.hidden = false;
+    toast.style.display = '';
     clearTimeout(toast._timer);
-    toast._timer = setTimeout(() => { toast.hidden = true; }, duration);
+    toast._timer = setTimeout(() => { toast.style.display = 'none'; }, duration);
   }
 
   // ===== GitHub API =====
@@ -238,12 +238,12 @@
     $('#edit-sold').checked = item ? item.sold : false;
 
     renderPhotoList();
-    $('#edit-modal').hidden = false;
+    $('#edit-modal').style.display = '';
     $('#edit-name').focus();
   }
 
   function closeEditModal() {
-    $('#edit-modal').hidden = true;
+    $('#edit-modal').style.display = 'none';
     pendingNewPhotos.forEach((p) => URL.revokeObjectURL(p.dataUrl));
     pendingNewPhotos = [];
     pendingDeletePhotos = [];
@@ -474,7 +474,7 @@
 
     btn.disabled = true;
     btn.textContent = '연결 중...';
-    errorEl.hidden = true;
+    errorEl.style.display = 'none';
 
     try {
       setToken(val);
@@ -485,7 +485,7 @@
       errorEl.textContent = err.status === 401
         ? '토큰이 유효하지 않습니다.'
         : `연결 실패: ${err.message}`;
-      errorEl.hidden = false;
+      errorEl.style.display = '';
     } finally {
       btn.disabled = false;
       btn.textContent = '연결';
@@ -493,13 +493,13 @@
   }
 
   function showAuthScreen() {
-    $('#auth-screen').hidden = false;
-    $('#admin-screen').hidden = true;
+    $('#auth-screen').style.display = '';
+    $('#admin-screen').style.display = 'none';
   }
 
   async function loadAndShow() {
-    $('#auth-screen').hidden = true;
-    $('#admin-screen').hidden = false;
+    $('#auth-screen').style.display = 'none';
+    $('#admin-screen').style.display = '';
     await loadFurnitureData();
     renderList();
   }
