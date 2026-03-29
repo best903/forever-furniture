@@ -97,6 +97,20 @@ a {
   overflow: hidden;
 }
 
+.gallery-wrapper::before {
+  content: '터치하여 확대';
+  position: absolute;
+  bottom: 32px;
+  right: 8px;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
 .gallery {
   display: flex;
   will-change: transform;
@@ -197,6 +211,10 @@ a {
 .detail-link:hover {
   border-color: #999;
   color: #333;
+}
+
+.furniture-card.sold .gallery-wrapper::before {
+  display: none;
 }
 
 /* ===== Sold Overlay ===== */
@@ -393,5 +411,9 @@ body.lightbox-open {
 
   .price-selling {
     font-size: 1.35rem;
+  }
+
+  .gallery-wrapper::before {
+    content: '클릭하여 확대';
   }
 }
