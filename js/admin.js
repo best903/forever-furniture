@@ -6,6 +6,20 @@
   const BRANCH = 'main';
   const API_BASE = 'https://api.github.com';
 
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function sanitizeUrl(url) {
+    const s = String(url).trim();
+    return /^https?:\/\//i.test(s) ? s : '';
+  }
+
   // ===== State =====
   let token = '';
   let furnitureData = null;
@@ -91,9 +105,9 @@
   }
 
   // ===== Token =====
-  function getToken() { return localStorage.getItem('gh_token') || ''; }
-  function setToken(t) { localStorage.setItem('gh_token', t); token = t; }
-  function clearToken() { localStorage.removeItem('gh_token'); token = ''; }
+  function getToken() { return sessionStorage.getItem('gh_token') || ''; }
+  function setToken(t) { sessionStorage.setItem('gh_token', t); token = t; }
+  function clearToken() { sessionStorage.removeItem('gh_token'); token = ''; }
   async function validateToken() { await apiRequest(`/repos/${OWNER}/${REPO}`); }
 
   // ===== Data =====
@@ -167,23 +181,25 @@
       return;
     }
     list.innerHTML = furnitureData.furniture.map((item) => {
-      const thumbSrc = item.images.length ? `images/${item.id}/${item.images[0]}` : '';
+      const safeId = escapeHtml(item.id);
+      const thumbSrc = item.images.length ? `images/${safeId}/${escapeHtml(item.images[0])}` : '';
       const thumbHtml = thumbSrc ? `<img class="admin-card-thumb" src="${thumbSrc}" alt="">` : `<div class="admin-card-thumb"></div>`;
       const soldClass = item.sold ? ' sold' : '';
       const statusText = item.sold ? '판매완료' : `${item.sellingPrice.toLocaleString('ko-KR')}원`;
       return `
-        <div class="admin-card${soldClass}" data-id="${item.id}">
+        <div class="admin-card${soldClass}" data-id="${safeId}">
           ${thumbHtml}
           <div class="admin-card-info">
-            <div class="admin-card-name">${item.name}</div>
+            <div class="admin-card-name">${escapeHtml(item.name)}</div>
             <div class="admin-card-price">${statusText}</div>
           </div>
           <div class="admin-card-actions">
-            <button class="btn btn-ghost btn-sm" onclick="Admin.edit('${item.id}')">편집</button>
-            <button class="btn btn-danger btn-sm" onclick="Admin.remove('${item.id}')">삭제</button>
+            <button class="btn btn-ghost btn-sm" data-action="edit" data-id="${safeId}">편집</button>
+            <button class="btn btn-danger btn-sm" data-action="remove" data-id="${safeId}">삭제</button>
           </div>
         </div>`;
     }).join('');
+
   }
 
   // ===== Edit Modal =====
@@ -233,8 +249,8 @@
     const count = allPhotos.length;
     container.innerHTML = allPhotos.map((photo, i) => {
       const src = photo.type === 'existing'
-        ? `images/${editingItem.id}/${photo.filename}`
-        : photo.dataUrl;
+        ? `images/${escapeHtml(editingItem.id)}/${escapeHtml(photo.filename)}`
+        : escapeHtml(photo.dataUrl);
       const isNew = photo.type === 'new' ? ' new-photo' : '';
       const upBtn = i > 0 ? `<button type="button" class="photo-order-btn" onclick="Admin.movePhoto(${i},-1)">↑</button>` : '';
       const downBtn = i < count - 1 ? `<button type="button" class="photo-order-btn" onclick="Admin.movePhoto(${i},1)">↓</button>` : '';
@@ -254,8 +270,8 @@
     const container = $('#links-list');
     container.innerHTML = editingLinks.map((link, i) => `
       <div class="link-row">
-        <input type="text" value="${link.label}" placeholder="라벨" onchange="Admin.updateLink(${i},'label',this.value)">
-        <input type="url" value="${link.url}" placeholder="https://..." onchange="Admin.updateLink(${i},'url',this.value)">
+        <input type="text" value="${escapeHtml(link.label)}" placeholder="라벨" onchange="Admin.updateLink(${i},'label',this.value)">
+        <input type="url" value="${escapeHtml(link.url)}" placeholder="https://..." onchange="Admin.updateLink(${i},'url',this.value)">
         <button type="button" class="btn btn-danger btn-sm" onclick="Admin.removeLink(${i})">&times;</button>
       </div>
     `).join('');
@@ -307,7 +323,7 @@
         originalPrice: Number($('#edit-original-price').value),
         sellingPrice: Number($('#edit-selling-price').value),
         description: $('#edit-description').value.trim(),
-        links: editingLinks.filter((l) => l.url),
+        links: editingLinks.filter((l) => l.url).map((l) => ({ ...l, url: sanitizeUrl(l.url) })),
         images: finalImages,
         sold: $('#edit-sold').checked,
       };
@@ -342,7 +358,7 @@
     return new Promise((resolve) => {
       const overlay = document.createElement('div');
       overlay.className = 'confirm-overlay';
-      overlay.innerHTML = `<div class="confirm-box"><p>${msg}</p><button class="btn btn-danger btn-sm" id="confirm-yes">삭제</button><button class="btn btn-ghost btn-sm" id="confirm-no">취소</button></div>`;
+      overlay.innerHTML = `<div class="confirm-box"><p>${escapeHtml(msg)}</p><button class="btn btn-danger btn-sm" id="confirm-yes">삭제</button><button class="btn btn-ghost btn-sm" id="confirm-no">취소</button></div>`;
       document.body.appendChild(overlay);
       overlay.querySelector('#confirm-yes').onclick = () => { overlay.remove(); resolve(true); };
       overlay.querySelector('#confirm-no').onclick = () => { overlay.remove(); resolve(false); };
@@ -398,6 +414,15 @@
     $('#btn-add-link').addEventListener('click', () => {
       editingLinks.push({ label: '', url: '' });
       renderLinksList();
+    });
+
+    // 이벤트 위임: renderList()의 버튼 클릭 (인라인 onclick 대신 안전한 처리)
+    $('#furniture-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      if (btn.dataset.action === 'edit') Admin.edit(id);
+      else if (btn.dataset.action === 'remove') Admin.remove(id);
     });
 
     const savedToken = getToken();

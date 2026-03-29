@@ -4,6 +4,20 @@
   const cacheBust = Date.now();
   const SWIPE_THRESHOLD = 40;
 
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function sanitizeUrl(url) {
+    const s = String(url).trim();
+    return /^https?:\/\//i.test(s) ? s : '';
+  }
+
   function formatPrice(num) {
     return num.toLocaleString('ko-KR') + '원';
   }
@@ -15,9 +29,11 @@
 
   function renderCard(item) {
     const soldClass = item.sold ? ' sold' : '';
+    const safeId = escapeHtml(item.id);
+    const safeName = escapeHtml(item.name);
     const images = item.images
       .map((file, i) => {
-        return `<img src="images/${item.id}/${file}?t=${cacheBust}" alt="${item.name} 사진 ${i + 1}">`;
+        return `<img src="images/${safeId}/${escapeHtml(file)}?t=${cacheBust}" alt="${safeName} 사진 ${i + 1}">`;
       })
       .join('');
 
@@ -28,26 +44,29 @@
     const links = item.links || (item.detailUrl ? [{ label: '상품 정보', url: item.detailUrl }] : []);
     const linksHtml = links
       .filter((l) => l.url)
-      .map((l) => `<a href="${l.url}" class="detail-link" target="_blank" rel="noopener">${l.label || '링크'}</a>`)
+      .map((l) => {
+        const safeUrl = sanitizeUrl(l.url);
+        return safeUrl ? `<a href="${escapeHtml(safeUrl)}" class="detail-link" target="_blank" rel="noopener noreferrer">${escapeHtml(l.label || '링크')}</a>` : '';
+      })
       .join('');
 
     const discount = calcDiscount(item.originalPrice, item.sellingPrice);
     const discountBadge = discount > 0 ? `<span class="price-discount">${discount}%</span>` : '';
 
     return `
-      <article id="${item.id}" class="furniture-card${soldClass}">
+      <article id="${safeId}" class="furniture-card${soldClass}">
         <div class="gallery-wrapper">
           <div class="gallery" data-index="0">${images}</div>
           ${item.images.length > 1 ? `<button class="gallery-arrow gallery-arrow-left">&#8249;</button><button class="gallery-arrow gallery-arrow-right">&#8250;</button><div class="gallery-dots">${dots}</div>` : ''}
         </div>
         <div class="card-body">
-          <h2 class="card-title">${item.name}</h2>
+          <h2 class="card-title">${safeName}</h2>
           <div class="card-price">
             ${discountBadge}
             <span class="price-original">${formatPrice(item.originalPrice)}</span>
             <span class="price-selling">${formatPrice(item.sellingPrice)}</span>
           </div>
-          <p class="card-description">${item.description}</p>
+          <p class="card-description">${escapeHtml(item.description)}</p>
           ${linksHtml}
         </div>
       </article>`;
@@ -140,7 +159,7 @@
     lightboxSourceGallery = gallery;
 
     const imagesHtml = Array.from(imgs)
-      .map((img) => `<img src="${img.src}" alt="${img.alt}">`)
+      .map((img) => `<img src="${escapeHtml(img.src)}" alt="${escapeHtml(img.alt)}">`)
       .join('');
 
     const dotsHtml = imgs.length > 1
@@ -275,10 +294,11 @@
   }
 
   function setContactLinks(url) {
+    const safeUrl = sanitizeUrl(url);
     document.querySelectorAll('#contact-link, #footer-contact-link').forEach((link) => {
-      link.href = url;
+      link.href = safeUrl;
       link.target = '_blank';
-      link.rel = 'noopener';
+      link.rel = 'noopener noreferrer';
     });
   }
 
