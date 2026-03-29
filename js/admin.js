@@ -107,16 +107,16 @@
 
   // ===== Token Management =====
   function getToken() {
-    return sessionStorage.getItem('gh_token') || '';
+    return localStorage.getItem('gh_token') || '';
   }
 
   function setToken(t) {
-    sessionStorage.setItem('gh_token', t);
+    localStorage.setItem('gh_token', t);
     token = t;
   }
 
   function clearToken() {
-    sessionStorage.removeItem('gh_token');
+    localStorage.removeItem('gh_token');
     token = '';
   }
 
@@ -128,14 +128,26 @@
   async function loadFurnitureData() {
     const file = await getFile('data/furniture.json');
     furnitureSha = file.sha;
-    const json = atob(file.content.replace(/\n/g, ''));
+    // UTF-8 safe base64 decoding
+    const binary = atob(file.content.replace(/\n/g, ''));
+    const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+    const json = new TextDecoder().decode(bytes);
     furnitureData = JSON.parse(json);
     return furnitureData;
   }
 
   async function saveFurnitureData(message) {
     const json = JSON.stringify(furnitureData, null, 2) + '\n';
-    const base64 = btoa(unescape(encodeURIComponent(json)));
+    // UTF-8 safe base64 encoding
+    const bytes = new TextEncoder().encode(json);
+    let binary = '';
+    bytes.forEach((b) => { binary += String.fromCharCode(b); });
+    const base64 = btoa(binary);
+
+    // Always get fresh SHA right before save
+    const fresh = await getFile('data/furniture.json');
+    furnitureSha = fresh.sha;
+
     const result = await putFile('data/furniture.json', base64, furnitureSha, message);
     furnitureSha = result.content.sha;
   }
@@ -334,7 +346,9 @@
       // Refresh SHA before save
       const freshFile = await getFile('data/furniture.json');
       furnitureSha = freshFile.sha;
-      const freshJson = atob(freshFile.content.replace(/\n/g, ''));
+      const freshBin = atob(freshFile.content.replace(/\n/g, ''));
+      const freshBytes = Uint8Array.from(freshBin, (c) => c.charCodeAt(0));
+      const freshJson = new TextDecoder().decode(freshBytes);
       furnitureData = JSON.parse(freshJson);
 
       if (isNew) {
@@ -400,7 +414,9 @@
       // Refresh and update JSON
       const freshFile = await getFile('data/furniture.json');
       furnitureSha = freshFile.sha;
-      const freshJson = atob(freshFile.content.replace(/\n/g, ''));
+      const freshBin = atob(freshFile.content.replace(/\n/g, ''));
+      const freshBytes = Uint8Array.from(freshBin, (c) => c.charCodeAt(0));
+      const freshJson = new TextDecoder().decode(freshBytes);
       furnitureData = JSON.parse(freshJson);
 
       furnitureData.furniture = furnitureData.furniture.filter((f) => f.id !== id);
