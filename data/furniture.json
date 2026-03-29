@@ -6,32 +6,40 @@
   "furniture": [
     {
       "id": "sofa",
-      "name": "3인용 패브릭 소파",
+      "name": "한샘 리클라이너 쇼파 : MVME 시어터 소파 페더화이트 RC 3인",
       "originalPrice": 890000,
       "sellingPrice": 350000,
-      "description": "2년 사용, 상태 양호. 커버 세탁 완료. 쿠션 탄성 좋음.",
+      "description": "2ë ì¬ì©, ìí ìí¸. ì»¤ë² ì¸í ìë£. ì¿ ì íì± ì¢ì.",
       "detailUrl": "https://www.coupang.com/example-sofa",
-      "images": ["1.jpg", "2.jpg", "3.jpg"],
+      "images": [
+        "1.jpg"
+      ],
       "sold": false
     },
     {
       "id": "desk",
-      "name": "원목 책상 1200",
+      "name": "ìëª© ì±ì 1200",
       "originalPrice": 450000,
       "sellingPrice": 200000,
-      "description": "1년 반 사용. 스크래치 없음. 서랍 포함.",
+      "description": "1ë ë° ì¬ì©. ì¤í¬ëì¹ ìì. ìë í¬í¨.",
       "detailUrl": "https://www.coupang.com/example-desk",
-      "images": ["1.jpg", "2.jpg"],
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "sold": false
     },
     {
       "id": "bookshelf",
-      "name": "5단 오픈 책장",
+      "name": "5ë¨ ì¤í ì±ì¥",
       "originalPrice": 320000,
       "sellingPrice": 120000,
-      "description": "3년 사용. 약간의 사용감 있으나 구조 튼튼함.",
+      "description": "3ë ì¬ì©. ì½ê°ì ì¬ì©ê° ìì¼ë êµ¬ì¡° í¼í¼í¨.",
       "detailUrl": "",
-      "images": ["1.jpg", "2.jpg"],
+      "images": [
+        "1.jpg",
+        "2.jpg"
+      ],
       "sold": true
     }
   ]
