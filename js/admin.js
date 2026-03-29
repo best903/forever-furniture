@@ -55,6 +55,12 @@
   }
 
   async function putFile(path, contentBase64, sha, message) {
+    // If no SHA provided, check if file exists and get its SHA
+    if (!sha) {
+      const existing = await getFile(path).catch(() => null);
+      if (existing) sha = existing.sha;
+    }
+
     const body = {
       message,
       content: contentBase64,
@@ -68,8 +74,8 @@
         body: JSON.stringify(body),
       });
     } catch (err) {
-      if (err.status === 409) {
-        // SHA conflict — refresh and retry once
+      if (err.status === 409 || err.status === 422) {
+        // SHA conflict or missing — refresh and retry once
         const fresh = await getFile(path).catch(() => null);
         if (fresh) {
           body.sha = fresh.sha;
