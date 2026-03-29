@@ -25,9 +25,11 @@
       .map((_, i) => `<span class="dot${i === 0 ? ' active' : ''}"></span>`)
       .join('');
 
-    const detailLink = item.detailUrl
-      ? `<a href="${item.detailUrl}" class="detail-link" target="_blank" rel="noopener">상품 정보 보기</a>`
-      : '';
+    const links = item.links || (item.detailUrl ? [{ label: '상품 정보', url: item.detailUrl }] : []);
+    const linksHtml = links
+      .filter((l) => l.url)
+      .map((l) => `<a href="${l.url}" class="detail-link" target="_blank" rel="noopener">${l.label || '링크'}</a>`)
+      .join('');
 
     const discount = calcDiscount(item.originalPrice, item.sellingPrice);
     const discountBadge = discount > 0 ? `<span class="price-discount">${discount}%</span>` : '';
@@ -46,7 +48,7 @@
             <span class="price-selling">${formatPrice(item.sellingPrice)}</span>
           </div>
           <p class="card-description">${item.description}</p>
-          ${detailLink}
+          ${linksHtml}
         </div>
       </article>`;
   }

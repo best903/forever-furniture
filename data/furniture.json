@@ -1,6 +1,6 @@
 {
   "contact": {
-    "kakaoOpenChatUrl": "https://open.kakao.com/o/xxxxx"
+    "kakaoOpenChatUrl": "https://open.kakao.com/o/sThQWRni"
   },
   "siteUrl": "https://best903.github.io/forever-furniture",
   "furniture": [
@@ -10,12 +10,17 @@
       "originalPrice": 2753000,
       "sellingPrice": 1500000,
       "description": "한샘 쇼룸 가서 앉자마자 구매한 쇼파! 성인 네 명이 낑겨 앉아서 스위치 플레이도 했어요",
-      "detailUrl": "https://naver.me/xfbctdrS",
       "images": [
         "1774775668203-1.jpg",
         "1774775670440-2.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://naver.me/xfbctdrS"
+        }
+      ]
     },
     {
       "id": "desk",
@@ -23,7 +28,6 @@
       "originalPrice": 1780000,
       "sellingPrice": 400000,
       "description": "24년 6월 구매, 슬라이딩 도어로 공간 효율성이 좋고 댐퍼가 있어서 부드럽게 닫혀 좋아요.",
-      "detailUrl": "https://m.store.hanssem.com/goods/213816",
       "images": [
         "1774779692186-1.jpg",
         "1774779694426-2.jpg",
@@ -34,7 +38,13 @@
         "1774779706274-7.jpg",
         "1774779708503-8.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://m.store.hanssem.com/goods/213816"
+        }
+      ]
     },
     {
       "id": "bookshelf",
@@ -42,11 +52,16 @@
       "originalPrice": 1988000,
       "sellingPrice": 1000000,
       "description": "24년 5월 구매, 집에 딱맞는 크기의 워시타워 컴팩트! 상태 아주 좋아요.\nTmi. 집먼지진드기 알러지가 있어 이불 빨래를 자주했는데 두꺼운 겨울 이불 빨래도 넉넉히 되고, 세탁기 건조기 분리돼있어 세탁기에 빨래할 때 건조기로는 이불 침구털기 기능 자주 썼는데 아주 좋았어요.\n[26년 6월 중순 이후 구매 가능]",
-      "detailUrl": "https://search.shopping.naver.com/catalog/34429257618?cat_id=50015901&frm=MOSCMOD&query=W10WAN&nl-ts-pid=jNCcXlqXKZCssAdQvhs-015782&NaPm=ct%3Dmnbnmcts%7Cci%3Dc3dbe279a2a4766bb24fcac30e3f9a9dc90f6e25%7Ctr%3Dsls%7Csn%3D95694%7Chk%3D763cda3f56982153cab4a162c59f953a1c3a33ab",
       "images": [
         "1774779948473-1.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://search.shopping.naver.com/catalog/34429257618?cat_id=50015901&frm=MOSCMOD&query=W10WAN&nl-ts-pid=jNCcXlqXKZCssAdQvhs-015782&NaPm=ct%3Dmnbnmcts%7Cci%3Dc3dbe279a2a4766bb24fcac30e3f9a9dc90f6e25%7Ctr%3Dsls%7Csn%3D95694%7Chk%3D763cda3f56982153cab4a162c59f953a1c3a33ab"
+        }
+      ]
     },
     {
       "id": "item-1774782545192",
@@ -54,11 +69,16 @@
       "originalPrice": 1896300,
       "sellingPrice": 1300000,
       "description": "24년 6월 구매. 냉장고 냉동고 크기 아주 넉넉하고 상태 최상입니다.\n[26년 6월 중순 이후 구매 가능]",
-      "detailUrl": "https://search.shopping.naver.com/catalog/55463944024?cat_id=50002558&frm=MOSCMOD&query=T873MEE012&nl-ts-pid=jNCcXlqXKZCssAdQvhs-015782&NaPm=ct%3Dmnbnm874%7Cci%3Da990708e964e8689fafc8f321a99999e4e2b318f%7Ctr%3Dsls%7Csn%3D95694%7Chk%3Da3322ed546ce978fd5dbee0e1dc3050bf3d3ead3",
       "images": [
         "1774782614079-1.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://search.shopping.naver.com/catalog/55463944024?cat_id=50002558&frm=MOSCMOD&query=T873MEE012&nl-ts-pid=jNCcXlqXKZCssAdQvhs-015782&NaPm=ct%3Dmnbnm874%7Cci%3Da990708e964e8689fafc8f321a99999e4e2b318f%7Ctr%3Dsls%7Csn%3D95694%7Chk%3Da3322ed546ce978fd5dbee0e1dc3050bf3d3ead3"
+        }
+      ]
     },
     {
       "id": "item-1774782841102",
@@ -66,11 +86,16 @@
       "originalPrice": 117800,
       "sellingPrice": 50000,
       "description": "24년 6월 구매. 냉장고 옆 죽는 공간 효율 최대로 ! 보관 공간 매우 넉넉합니다.",
-      "detailUrl": "https://ozip.me/wlAXO9D",
       "images": [
         "1774782843560-2.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://ozip.me/wlAXO9D"
+        }
+      ]
     },
     {
       "id": "item-1774783451213",
@@ -78,13 +103,18 @@
       "originalPrice": 1703800,
       "sellingPrice": 1300000,
       "description": "24년 6월 구매. 매년 업체 불러 청소 해두어 깨끗해요. (가림막 별도)",
-      "detailUrl": "https://www.lge.co.kr/air-conditioners/fq17hdkhc1?utm_source=perplexity&share=Y",
       "images": [
         "1774783451213-1.jpg",
         "1774783453635-2.jpg",
         "1774783455940-3.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://www.lge.co.kr/air-conditioners/fq17hdkhc1?utm_source=perplexity&share=Y"
+        }
+      ]
     },
     {
       "id": "item-1774783707920",
@@ -92,13 +122,18 @@
       "originalPrice": 113050,
       "sellingPrice": 60000,
       "description": "24년 6월 구매. 에어컨 바람이 바로 오지 않도록 위아래 방향 조절 가능한 가벽입니다. 에어컨 쓰지 않는 계절엔 깔끔하게 가려두는 용도로 좋습니다.",
-      "detailUrl": "https://ozip.me/b4VNQzf",
       "images": [
         "1774783707920-1.jpg",
         "1774783710505-2.jpg",
         "1774783713066-3.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://ozip.me/b4VNQzf"
+        }
+      ]
     },
     {
       "id": "item-1774784183126",
@@ -106,14 +141,19 @@
       "originalPrice": 239000,
       "sellingPrice": 150000,
       "description": "24년 6월 구매. 혼신의 힘을 다해 서치한 결과 찾은, 맞춤 가구처럼 붙박이장과 딱 맞는 화장대. 거울 쪽 깊은 수납 가능하고, 아랫쪽에도 서랍이 넉넉해요. 거울쪽에 붙여둔 조명은 단순히 붙여둔 것으로 쉽게 제거 가능합니다.",
-      "detailUrl": "https://ozip.me/sbaNL4V",
       "images": [
         "1774784183126-1.jpg",
         "1774784185725-2.jpg",
         "1774784187963-3.jpg",
         "1774784190845-4.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://ozip.me/sbaNL4V"
+        }
+      ]
     },
     {
       "id": "item-1774784506437",
@@ -121,14 +161,19 @@
       "originalPrice": 550000,
       "sellingPrice": 300000,
       "description": "25년 11월 구매. 한 쪽 수납 서랍, 프레임 안쪽 수납 넉넉한 프레임, 헤드쪽에 조명 내장돼있고 콘센트 하나 있어요. 헤드쪽에 핸드폰이나 간단한 짐 둘 공간 있어 편리해요. 양쪽 패널 추가하여 조명이 더 예쁘고, usb포트와 추가 서랍이 하나씩 있어 두 명이 각자 사용하기 편리합니다.",
-      "detailUrl": "https://naver.me/F168nBZw",
       "images": [
         "1774784506438-1.jpg",
         "1774784509783-2.jpg",
         "1774784512022-3.jpg",
         "1774784514280-4.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://naver.me/F168nBZw"
+        }
+      ]
     },
     {
       "id": "item-1774784879270",
@@ -136,7 +181,6 @@
       "originalPrice": 529000,
       "sellingPrice": 200000,
       "description": "24년 4월 구매. 푹 꺼지는 매트리스에선 남편이 허리아프대서 바꿨더니 괜찮아서 마음에 들었던 매트리스예요. 항상 매트리스 커버 사용해서 깨끗합니다.",
-      "detailUrl": "https://m.brand.naver.com/sleeper/products/10003197436",
       "images": [
         "1774784879271-1.jpg",
         "1774784882450-2.jpg",
@@ -145,7 +189,13 @@
         "1774784890129-5.jpg",
         "1774784892689-6.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://m.brand.naver.com/sleeper/products/10003197436"
+        }
+      ]
     },
     {
       "id": "item-1774785283726",
@@ -153,7 +203,6 @@
       "originalPrice": 298000,
       "sellingPrice": 150000,
       "description": "24년 6월 구매. 한 번 쓰면 못벗어나는 모션 데스크. 자동이라 편해요. 3단 조절형이라 성인 기준 서서 사용 가능. 배부를 때 서서하면 좋아요 ㅎ 컴퓨터 장시간 사용하는 분들에게 필수로 추천해요. 게임방 로망 실현 1등 공신 커플 모션 데스크 ❤️",
-      "detailUrl": "https://ozip.me/ub0Tvu7",
       "images": [
         "1774785283726-1.jpg",
         "1774785286179-2.jpg",
@@ -162,7 +211,13 @@
         "1774785293219-5.jpg",
         "1774785295781-6.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://ozip.me/ub0Tvu7"
+        }
+      ]
     },
     {
       "id": "item-1774785552921",
@@ -170,7 +225,6 @@
       "originalPrice": 130000,
       "sellingPrice": 70000,
       "description": "24년 6월 구매. 현관으로 들어왔을 때 거실까지 시야를 차단하지 않는 높이에 수납 넉넉한 렌지대! 튼튼해서 강추합니다👍",
-      "detailUrl": "https://ozip.me/c7DA9Rs",
       "images": [
         "1774785552923-1.jpg",
         "1774785555446-2.jpg",
@@ -178,7 +232,13 @@
         "1774785560499-4.jpg",
         "1774785562743-5.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://ozip.me/c7DA9Rs"
+        }
+      ]
     },
     {
       "id": "item-1774786517259",
@@ -186,7 +246,6 @@
       "originalPrice": 188000,
       "sellingPrice": 120000,
       "description": "24년 6월 구매. 손님이 오면 확장할 수 있는 책상입니다. 의자 2개는 겹쳐서 보관할 수 있는 형태예요. 튼튼하고 오염에 강해서 좋습니다.",
-      "detailUrl": "https://applink.ikea.com/tY8M9r9M4w--40375129--kr--ko",
       "images": [
         "1774786517259-1.jpg",
         "1774786519703-2.jpg",
@@ -199,7 +258,13 @@
         "1774786542041-9.jpg",
         "1774786544600-10.jpg"
       ],
-      "sold": false
+      "sold": false,
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://applink.ikea.com/tY8M9r9M4w--40375129--kr--ko"
+        }
+      ]
     }
   ]
 }
