@@ -320,18 +320,7 @@
         sold: $('#edit-sold').checked,
       };
 
-      // 1. Upload new photos
-      for (let i = 0; i < pendingNewPhotos.length; i++) {
-        const photo = pendingNewPhotos[i];
-        const filename = `${itemData.images.length + 1}.jpg`;
-        showToast(`사진 업로드 중... (${i + 1}/${pendingNewPhotos.length})`, 'info');
-
-        const base64 = await blobToBase64(photo.blob);
-        await putFile(`images/${id}/${filename}`, base64, null, `Add image: ${id}/${filename}`);
-        itemData.images.push(filename);
-      }
-
-      // 2. Delete removed photos
+      // 1. Delete removed photos FIRST (to avoid filename conflicts)
       for (const filename of pendingDeletePhotos) {
         showToast(`사진 삭제 중...`, 'info');
         try {
@@ -340,6 +329,17 @@
         } catch {
           // Ignore if file already gone
         }
+      }
+
+      // 2. Upload new photos (with timestamp filenames to avoid conflicts)
+      for (let i = 0; i < pendingNewPhotos.length; i++) {
+        const photo = pendingNewPhotos[i];
+        const filename = `${Date.now()}-${i + 1}.jpg`;
+        showToast(`사진 업로드 중... (${i + 1}/${pendingNewPhotos.length})`, 'info');
+
+        const base64 = await blobToBase64(photo.blob);
+        await putFile(`images/${id}/${filename}`, base64, null, `Add image: ${id}/${filename}`);
+        itemData.images.push(filename);
       }
 
       // 3. Update furniture.json (last, once)
