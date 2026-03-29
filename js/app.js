@@ -5,12 +5,14 @@
     return num.toLocaleString('ko-KR') + '원';
   }
 
+  const cacheBust = Date.now();
+
   function renderCard(item) {
     const soldClass = item.sold ? ' sold' : '';
     const images = item.images
       .map((file, i) => {
         const lazy = i > 0 ? ' loading="lazy"' : '';
-        return `<img src="images/${item.id}/${file}" alt="${item.name} 사진 ${i + 1}"${lazy}>`;
+        return `<img src="images/${item.id}/${file}?t=${cacheBust}" alt="${item.name} 사진 ${i + 1}"${lazy}>`;
       })
       .join('');
 
@@ -84,7 +86,7 @@
     const list = document.getElementById('furniture-list');
 
     try {
-      const res = await fetch('data/furniture.json');
+      const res = await fetch('data/furniture.json?t=' + Date.now());
       if (!res.ok) throw new Error(res.statusText);
       const data = await res.json();
 
