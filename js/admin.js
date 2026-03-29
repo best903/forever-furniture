@@ -482,10 +482,12 @@
       await loadAndShow();
     } catch (err) {
       clearToken();
-      errorEl.textContent = err.status === 401
-        ? '토큰이 유효하지 않습니다.'
-        : `연결 실패: ${err.message}`;
-      errorEl.style.display = '';
+      const msg = err.status === 401
+        ? '토큰이 유효하지 않습니다. 권한을 확인해주세요.'
+        : `연결 실패 (${err.status || ''}): ${err.message}`;
+      errorEl.textContent = msg;
+      errorEl.style.display = 'block';
+      showToast(msg, 'error', 5000);
     } finally {
       btn.disabled = false;
       btn.textContent = '연결';
