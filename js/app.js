@@ -66,6 +66,114 @@
     });
   }
 
+  // ===== Lightbox =====
+  let lightboxEl = null;
+  let lightboxGallery = null;
+  let lightboxObserver = null;
+  let lightboxSourceGallery = null;
+  let lightboxCurrentIndex = 0;
+
+  function openLightbox(gallery, startIndex) {
+    const imgs = gallery.querySelectorAll('img');
+    if (!imgs.length) return;
+
+    lightboxSourceGallery = gallery;
+    lightboxCurrentIndex = startIndex;
+
+    // Build lightbox HTML
+    const imagesHtml = Array.from(imgs)
+      .map((img) => `<img src="${img.src}" alt="${img.alt}">`)
+      .join('');
+
+    const dotsHtml = imgs.length > 1
+      ? `<div class="lightbox-dots">${Array.from(imgs).map((_, i) => `<span class="dot${i === startIndex ? ' active' : ''}"></span>`).join('')}</div>`
+      : '';
+
+    lightboxEl = document.createElement('div');
+    lightboxEl.className = 'lightbox';
+    lightboxEl.setAttribute('role', 'dialog');
+    lightboxEl.setAttribute('aria-modal', 'true');
+    lightboxEl.innerHTML = `
+      <button class="lightbox-close">&times;</button>
+      <div class="lightbox-gallery">${imagesHtml}</div>
+      ${dotsHtml}`;
+
+    document.body.appendChild(lightboxEl);
+    document.body.classList.add('lightbox-open');
+
+    lightboxGallery = lightboxEl.querySelector('.lightbox-gallery');
+
+    // Scroll to start image
+    const lbImgs = lightboxGallery.querySelectorAll('img');
+    if (lbImgs[startIndex]) {
+      lightboxGallery.scrollLeft = lbImgs[startIndex].offsetLeft;
+    }
+
+    // Dot indicators
+    if (imgs.length > 1) {
+      const dots = lightboxEl.querySelectorAll('.dot');
+      lightboxObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              lightboxCurrentIndex = Array.from(lbImgs).indexOf(entry.target);
+              dots.forEach((dot, i) => dot.classList.toggle('active', i === lightboxCurrentIndex));
+            }
+          });
+        },
+        { root: lightboxGallery, threshold: 0.5 }
+      );
+      lbImgs.forEach((img) => lightboxObserver.observe(img));
+    }
+
+    // Events
+    lightboxEl.addEventListener('click', closeLightbox);
+    lightboxEl.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+    lightboxGallery.addEventListener('click', (e) => e.stopPropagation());
+    const lbDots = lightboxEl.querySelector('.lightbox-dots');
+    if (lbDots) lbDots.addEventListener('click', (e) => e.stopPropagation());
+
+    document.addEventListener('keydown', handleLightboxKey);
+  }
+
+  function closeLightbox() {
+    if (!lightboxEl) return;
+
+    // Sync source gallery to current index
+    if (lightboxSourceGallery) {
+      const sourceImgs = lightboxSourceGallery.querySelectorAll('img');
+      if (sourceImgs[lightboxCurrentIndex]) {
+        lightboxSourceGallery.scrollLeft = sourceImgs[lightboxCurrentIndex].offsetLeft;
+      }
+    }
+
+    if (lightboxObserver) {
+      lightboxObserver.disconnect();
+      lightboxObserver = null;
+    }
+    document.removeEventListener('keydown', handleLightboxKey);
+    lightboxEl.remove();
+    lightboxEl = null;
+    lightboxGallery = null;
+    lightboxSourceGallery = null;
+    document.body.classList.remove('lightbox-open');
+  }
+
+  function handleLightboxKey(e) {
+    if (e.key === 'Escape') closeLightbox();
+  }
+
+  function initLightboxTriggers() {
+    document.querySelectorAll('.gallery img').forEach((img) => {
+      img.addEventListener('click', () => {
+        const gallery = img.closest('.gallery');
+        const imgs = gallery.querySelectorAll('img');
+        const index = Array.from(imgs).indexOf(img);
+        openLightbox(gallery, index);
+      });
+    });
+  }
+
   function scrollToHash() {
     if (!location.hash) return;
     const el = document.querySelector(location.hash);
@@ -96,6 +204,7 @@
       list.innerHTML = html;
 
       initGalleryIndicators();
+      initLightboxTriggers();
       scrollToHash();
     } catch (err) {
       list.innerHTML = '<p class="error-msg">데이터를 불러오지 못했습니다.</p>';

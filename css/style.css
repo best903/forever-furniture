@@ -99,7 +99,7 @@ a {
 .gallery {
   display: flex;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -115,6 +115,7 @@ a {
   aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
+  cursor: pointer;
 }
 
 .gallery-dots {
@@ -212,6 +213,70 @@ a {
 
 .furniture-card.sold .card-body {
   opacity: 0.5;
+}
+
+/* ===== Lightbox ===== */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  z-index: 101;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+}
+
+.lightbox-gallery {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  width: 100%;
+  height: 80vh;
+}
+
+.lightbox-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.lightbox-gallery img {
+  scroll-snap-align: center;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.lightbox-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.lightbox-dots .dot {
+  width: 8px;
+  height: 8px;
+}
+
+body.lightbox-open {
+  overflow: hidden;
 }
 
 /* ===== Footer ===== */
