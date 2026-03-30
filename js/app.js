@@ -276,7 +276,7 @@
   }
 
   function initLightboxTriggers() {
-    document.querySelectorAll('.gallery img').forEach((img) => {
+    document.querySelectorAll('.furniture-card .gallery img').forEach((img) => {
       img.addEventListener('click', () => {
         const gallery = img.closest('.gallery');
         const index = gallery._getIndex ? gallery._getIndex() : 0;
@@ -302,7 +302,30 @@
     });
   }
 
+  function initHeroAutoplay() {
+    const heroGallery = document.querySelector('.hero-slider .gallery');
+    if (!heroGallery || !heroGallery._goTo) return;
+    const count = heroGallery.querySelectorAll('img').length;
+    let timer;
+    function schedule() {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const next = (heroGallery._getIndex() + 1) % count;
+        heroGallery._goTo(next);
+        schedule();
+      }, 5000);
+    }
+    const wrapper = heroGallery.parentElement;
+    wrapper.addEventListener('touchend', () => schedule());
+    schedule();
+  }
+
   async function init() {
+    // Init hero slider (static HTML, no data dependency)
+    const heroGallery = document.querySelector('.hero-slider .gallery');
+    if (heroGallery) initSwipe(heroGallery);
+    initHeroAutoplay();
+
     const list = document.getElementById('furniture-list');
 
     try {
@@ -315,7 +338,8 @@
       const html = data.furniture.map(renderCard).join('');
       list.innerHTML = html;
 
-      initAllSwipes();
+      // Init card galleries only (not hero)
+      document.querySelectorAll('.furniture-card .gallery').forEach(initSwipe);
       initLightboxTriggers();
       scrollToHash();
     } catch (err) {
