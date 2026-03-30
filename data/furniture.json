@@ -26,8 +26,14 @@
       "id": "desk",
       "name": "한샘 슬라이딩 붙박이장",
       "originalPrice": 1780000,
-      "sellingPrice": 400000,
+      "sellingPrice": 1000000,
       "description": "24년 6월 구매, 슬라이딩 도어로 공간 효율성이 좋고 댐퍼가 있어서 부드럽게 닫혀 좋아요.",
+      "links": [
+        {
+          "label": "상품 정보",
+          "url": "https://m.store.hanssem.com/goods/213816"
+        }
+      ],
       "images": [
         "1774779692186-1.jpg",
         "1774779694426-2.jpg",
@@ -38,13 +44,7 @@
         "1774779706274-7.jpg",
         "1774779708503-8.jpg"
       ],
-      "sold": false,
-      "links": [
-        {
-          "label": "상품 정보",
-          "url": "https://m.store.hanssem.com/goods/213816"
-        }
-      ]
+      "sold": false
     },
     {
       "id": "bookshelf",
