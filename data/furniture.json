@@ -100,21 +100,21 @@
     {
       "id": "item-1774783451213",
       "name": "LG 휘센 오브제컬렉션 칸 스탠딩 에어컨",
-      "originalPrice": 1703800,
-      "sellingPrice": 1300000,
+      "originalPrice": 1300000,
+      "sellingPrice": 800000,
       "description": "24년 6월 구매. 매년 업체 불러 청소 해두어 깨끗해요. (가림막 별도)",
-      "images": [
-        "1774783451213-1.jpg",
-        "1774783453635-2.jpg",
-        "1774783455940-3.jpg"
-      ],
-      "sold": false,
       "links": [
         {
           "label": "상품 정보",
           "url": "https://www.lge.co.kr/air-conditioners/fq17hdkhc1?utm_source=perplexity&share=Y"
         }
-      ]
+      ],
+      "images": [
+        "1774783451213-1.jpg",
+        "1774783453635-2.jpg",
+        "1774783455940-3.jpg"
+      ],
+      "sold": false
     },
     {
       "id": "item-1774783707920",
