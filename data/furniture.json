@@ -50,18 +50,18 @@
       "id": "bookshelf",
       "name": "LG 워시타워 컴팩트",
       "originalPrice": 1988000,
-      "sellingPrice": 1000000,
+      "sellingPrice": 1500000,
       "description": "24년 5월 구매, 집에 딱맞는 크기의 워시타워 컴팩트! 상태 아주 좋아요.\nTmi. 집먼지진드기 알러지가 있어 이불 빨래를 자주했는데 두꺼운 겨울 이불 빨래도 넉넉히 되고, 세탁기 건조기 분리돼있어 세탁기에 빨래할 때 건조기로는 이불 침구털기 기능 자주 썼는데 아주 좋았어요.\n[26년 6월 중순 이후 구매 가능]",
-      "images": [
-        "1774779948473-1.jpg"
-      ],
-      "sold": false,
       "links": [
         {
           "label": "상품 정보",
           "url": "https://search.shopping.naver.com/catalog/34429257618?cat_id=50015901&frm=MOSCMOD&query=W10WAN&nl-ts-pid=jNCcXlqXKZCssAdQvhs-015782&NaPm=ct%3Dmnbnmcts%7Cci%3Dc3dbe279a2a4766bb24fcac30e3f9a9dc90f6e25%7Ctr%3Dsls%7Csn%3D95694%7Chk%3D763cda3f56982153cab4a162c59f953a1c3a33ab"
         }
-      ]
+      ],
+      "images": [
+        "1774779948473-1.jpg"
+      ],
+      "sold": false
     },
     {
       "id": "item-1774782545192",
